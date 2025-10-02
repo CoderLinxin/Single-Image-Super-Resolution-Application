@@ -208,7 +208,7 @@ class Experiment(metaclass=ABCMeta):
         np.savetxt(os.path.join(self.model_config.log_folder, '模型参数量.txt'), [params_descript], fmt='%s')
 
     # 加载预训练模型权重(如果有)以及学习率调度器
-    def load_model_weights_scheduler(self):
+    def load_model_weights_scheduler(self, is_gan_start: bool = False):
         # 加载预训练模型权重(以继续训练)
         # 测试阶段可以选择合适的模型加载(通过指定 test_model_path)，训练阶段总是通过 new_model_path 加载
         pretrain_model_path = self.model_config.test_model_path if self.is_test else self.new_model_path
@@ -217,19 +217,34 @@ class Experiment(metaclass=ABCMeta):
 
             dic = torch.load(pretrain_model_path, map_location=self.model_config.device, weights_only=True)
             self.model.load_state_dict(dic['model'])
-            self.optimizer.load_state_dict(dic['optimizer'])
-            self.start_epoch = dic['start_epoch'] + 1
+            if not is_gan_start:  # 如果是 gan 开始训练的第一个 epoch 则无需加载优化器
+                self.optimizer.load_state_dict(dic['optimizer'])
+                print('加载优化器')
+            else:
+                print('gan 第一个 epoch 训练, 无需加载优化器')
+            if type(self).__name__ != 'HITSIRPROGANExperiment':  # 如果是 HITSIRPROGANExperiment 那么 start_epoch 以判别器模型中保存的 start_epoch 为准
+                self.start_epoch = dic['start_epoch'] + 1
 
             print(f'模型权重路径: {pretrain_model_path}, 训练 epoch 数: {self.start_epoch - 1}')
             print('============ 加载模型权重 end ============')
 
+        # 同步初始学习率(这样使得修改最小学习率后学习率调整器调整学习率能够及时同步)
+        for param_group in self.optimizer.param_groups:
+            if "initial_lr" in param_group:
+                param_group['initial_lr'] = self.model_config.learning_rate
+            print(f'同步初始学习率为 {self.model_config.learning_rate}')
+
         # 创建优化器学习率调整器
+        # scheduler 构造时会读取优化器的 initial_lr 并保存到内部,并同步一次优化器的学习率(计算出本轮需要使用的正确的学习率(使用了initial_lr)), 后续 step 更新学习率时使用的就是此刻拿到的 initial_lr, 而不是根据优化器上的 initial_lr
+        # 假如后续优化器的 initial_lr 发生更改,只要没有重新构造 scheduler, 那么 scheduler.step 更新学习率参考的还是此处拿到的 initial_lr
         self.lr_scheduler = get_scheduler(
             optimizer=self.optimizer,
             T_max=self.model_config.epochs,
             eta_min=self.model_config.min_learning_rate,
             last_epoch=-1 if self.start_epoch == 1 else self.start_epoch - 2,
         )
+
+        print(f'当前epoch的学习率为: {self.optimizer.param_groups[0]["lr"]}')
 
     # 保存模型权重(记得在调用下面函数前确保start_epoch是最新的内容)
     def save_model_weights(self, model_path: str, model=None, optimizer=None):
@@ -295,6 +310,9 @@ class Experiment(metaclass=ABCMeta):
         if os.path.exists(self.lr_log_path):
             self.lr_log = np.loadtxt(self.lr_log_path, dtype=str).tolist()
             print(f'{os.path.basename(self.lr_log_path).split(".")[0]}加载完毕~')
+        if type(self).__name__ != 'HITSIRPROGANExperiment':
+            # 有可能本轮更改了初始学习率,导致上一轮 epoch 记录的本轮使用的学习率旧了,需要同步下
+            self.lr_log[-1] = f"epoch:{self.start_epoch},lr:{format_str(self.optimizer.param_groups[0]['lr'], 25)}"
         if os.path.exists(self.train_eval_seconds_consume_log_path):
             self.train_eval_seconds_consume_log = np.loadtxt(
                 self.train_eval_seconds_consume_log_path, dtype=str
@@ -379,10 +397,10 @@ class Experiment(metaclass=ABCMeta):
         self.save_model_weights(model_path=self.new_model_path)
 
         # 保存训练指标
-
         if type(self).__name__ != 'HITSIRPROGANExperiment':
             np.savetxt(self.loss_log_path, self.loss_log, fmt='%s')  # 文件不存在会自动创建相应的文件
-        np.savetxt(self.lr_log_path, self.lr_log, fmt='%s')
+        if type(self).__name__ != 'HITSIRPROGANExperiment':
+            np.savetxt(self.lr_log_path, self.lr_log, fmt='%s')
         np.savetxt(self.train_eval_seconds_consume_log_path, self.train_eval_seconds_consume_log, fmt='%s')
 
     # 训练函数
@@ -442,10 +460,27 @@ class Experiment(metaclass=ABCMeta):
         )
         lpips = self.lpips_fn(torch.from_numpy(hr_img_y), torch.from_numpy(sr_img_y))
 
+        is_psnr_nan = False
+        is_ssim_nan = False
+        is_lpips_nan = False
+
         # 统计 psnr、ssim、lpips
-        self.epoch_psnr.update(psnr, len(hr_img))
-        self.epoch_ssim.update(ssim, len(hr_img))
-        self.epoch_lpips.update(lpips.item(), len(hr_img))
+        if not np.isnan(psnr):
+            self.epoch_psnr.update(psnr, len(hr_img))
+        else:
+            is_psnr_nan = True
+        if not np.isnan(ssim):
+            self.epoch_ssim.update(ssim, len(hr_img))
+        else:
+            is_ssim_nan = True
+        if not np.isnan(lpips.item()):
+            self.epoch_lpips.update(lpips.item(), len(hr_img))
+        else:
+            is_lpips_nan = True
+
+        if is_psnr_nan or is_ssim_nan or is_lpips_nan:
+            print(f'出现 {"psnr " if is_psnr_nan else ""}{"ssim " if is_ssim_nan else ""}{"lpips " if is_lpips_nan else ""}为 nan')
+            raise ValueError('实验出错,实验指标为 nan')
 
     # 验证过程中遍历完每一个data_loader的回调
     def __eval_dataloader_process(
@@ -458,6 +493,9 @@ class Experiment(metaclass=ABCMeta):
             return
 
         start_epoch = start_epoch if start_epoch is not None else self.start_epoch
+
+        if self.epoch_lpips.avg == 0:  # 说明所有验证数据的 lpips 计算都出错了
+            self.epoch_lpips.avg = 1
 
         # 每个epoch结束时记录相关验证指标
         self.psnr_ssim_lpips_log.append([

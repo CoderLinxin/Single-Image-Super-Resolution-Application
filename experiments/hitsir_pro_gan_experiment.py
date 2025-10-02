@@ -73,14 +73,10 @@ class HITSIRPROGANExperiment(Experiment):
         self.d_loss_function = GANLoss('gan', 1.0, 0.0).to(self.model_config.device)
         self.d_loss_function_weight = 0.1  # 判别损失的权重
 
-    def load_model_weights_scheduler(self):
-        super(HITSIRPROGANExperiment, self).load_model_weights_scheduler()
-
-        # start_epoch 以判别器的 start_epoch 为准
-        self.start_epoch = 1
-
+    def load_model_weights_scheduler(self, is_gan_start: bool = False):
         # 加载判别器模型权重
         self.discriminator_pretrain_model_path = os.path.join(self.model_config.checkpoint_folder, 'discriminator_new_epoch_model.pth')
+
         if os.path.exists(self.discriminator_pretrain_model_path):
             print('============ 加载判别器模型权重 start ============')
 
@@ -91,6 +87,31 @@ class HITSIRPROGANExperiment(Experiment):
 
             print(f'模型权重路径: {self.discriminator_pretrain_model_path}, 训练 epoch 数: {self.start_epoch - 1}')
             print('============ 加载判别器模型权重 end ============')
+
+        # 同步初始学习率(这样使得修改最小学习率后学习率调整器调整学习率能够及时同步)
+        for param_group in self.discriminator_optimizer.param_groups:
+            if "initial_lr" in param_group:
+                param_group['initial_lr'] = self.model_config.learning_rate
+            print(f'同步判别器初始学习率为 {self.model_config.learning_rate}')
+
+        # 创建判别器的优化器学习率调整器
+        self.lr_discriminator_scheduler = get_scheduler(
+            optimizer=self.discriminator_optimizer,
+            T_max=self.model_config.epochs,
+            eta_min=self.model_config.min_learning_rate,
+            last_epoch=-1 if self.start_epoch == 1 else self.start_epoch - 2,
+        )
+
+        print(f'当前 epoch 的判别器学习率为: {self.discriminator_optimizer.param_groups[0]["lr"]}')
+        super(HITSIRPROGANExperiment, self).load_model_weights_scheduler(is_gan_start=self.start_epoch == 1)
+
+    def load_log(self):
+        self.lr_log = [  # 初始值
+            f"epoch:{self.start_epoch},lr:{format_str(self.optimizer.param_groups[0]['lr'], 25)}, discriminator_lr:{format_str(self.discriminator_optimizer.param_groups[0]['lr'], 25)}"
+        ]
+        super(HITSIRPROGANExperiment, self).load_log()
+        # 有可能本轮更改了初始学习率,导致上一轮 epoch 记录的本轮使用的学习率旧了,需要同步下
+        self.lr_log[-1] = f"epoch:{self.start_epoch},lr:{format_str(self.optimizer.param_groups[0]['lr'], 25)}, discriminator_lr:{format_str(self.discriminator_optimizer.param_groups[0]['lr'], 25)}"
 
     # 不使用父类的实现
     def train_batch_process(
@@ -150,6 +171,9 @@ class HITSIRPROGANExperiment(Experiment):
     ):
         super(HITSIRPROGANExperiment, self).train_dataloader_process(is_end, _)
 
+        # 每个epoch结束更新一次学习率
+        self.lr_discriminator_scheduler.step()
+
         # 每个epoch结束保存最新模型(判别器)
         self.save_model_weights(
             model_path=self.discriminator_pretrain_model_path,
@@ -159,8 +183,11 @@ class HITSIRPROGANExperiment(Experiment):
 
         # 每个epoch结束记录平均损失(加上判别损失)
         self.loss_log[-1].append(f'd_loss:{self.epoch_discriminator_loss.avg}')
+        self.lr_log[
+            -1] = f"epoch:{self.start_epoch + 1},lr:{format_str(self.optimizer.param_groups[0]['lr'], 25)}, discriminator_lr:{format_str(self.discriminator_optimizer.param_groups[0]['lr'], 25)}"
         # 保存训练指标
         np.savetxt(self.loss_log_path, self.loss_log, fmt='%s')  # 文件不存在会自动创建相应的文件
+        np.savetxt(self.lr_log_path, self.lr_log, fmt='%s')
 
 
 def hitsir_pro_gan_experiment(
@@ -204,8 +231,8 @@ def hitsir_pro_gan_experiment(
     # 模型配置
     model_config = HITModelConfig(
         batch_size=batch_size,
-        learning_rate=1e-4,
-        min_learning_rate=1e-5,
+        learning_rate=5e-5,
+        min_learning_rate=2e-6,
         optimizer='Adam',
         optimizer_params={'weight_decay': 0, 'betas': [0.9, 0.99]},
         loss_function=loss,
@@ -216,7 +243,7 @@ def hitsir_pro_gan_experiment(
         log_folder=f'logs/{folder_name}',
         train_data_folder='data/train',
         # train_data_name_list=['DIV2K_train_HR'],
-        train_data_name_list=['RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR'],
+        train_data_name_list=['RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR', 'blend'],
         # train_data_name_list=['RealSR(V3)'],
         eval_data_folder='data/eval',
         eval_data_name_list=['DIV2K_valid_HR30'],
