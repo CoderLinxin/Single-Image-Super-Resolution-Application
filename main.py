@@ -15,9 +15,9 @@ def main(model_name: str, is_test: bool, **kwargs):
 
 
 if __name__ == '__main__':
-    # 设置随机种子
-    torch.manual_seed(123)
-    torch.cuda.manual_seed(123)
+    # 设置随机种子(应用阶段不需要,增加多样性)
+    # torch.manual_seed(123)
+    # torch.cuda.manual_seed(123)
 
     # 防止使用 pil 读取图像并进行相关处理(resize、convert)检测到图片数据出现截断而抛出异常
     ImageFile.LOAD_TRUNCATED_IMAGES = True

@@ -815,6 +815,7 @@ class Experiment(metaclass=ABCMeta):
                 # 手动补充一次 eval
                 with torch.no_grad():
                     self.eval(start_epoch=self.start_epoch - 1)
+                self.save_epoch_mode_5(self.start_epoch - 1)
 
             # 遍历每一个 epoch
             for epoch in range(self.start_epoch, self.model_config.epochs + 1):
@@ -830,30 +831,33 @@ class Experiment(metaclass=ABCMeta):
                     self.eval()
 
                 # 每隔 5 个 epoch 保存一次所有指标
-                if epoch % 5 == 0:
-                    print('每隔5个epoch重新保存一次_start')
-                    weights_path = glob.glob(self.model_config.checkpoint_folder + '/*.pth')
-                    weight_save_path = self.model_config.checkpoint_folder + f'/epoch={5 if epoch == 5 else epoch - 5}'
-                    if not os.path.exists(weight_save_path):
-                        os.mkdir(weight_save_path)
-                    new_weight_save_path = weight_save_path if epoch == 5 else self.model_config.checkpoint_folder + f'/epoch={epoch}'
-                    os.rename(weight_save_path, new_weight_save_path)  # 文件夹重命名
-                    for weight_path in weights_path:
-                        shutil.copy(weight_path, new_weight_save_path + f'/{os.path.basename(weight_path)}')
-
-                    logs_path = glob.glob(self.model_config.log_folder + '/*.txt')
-                    log_save_path = self.model_config.log_folder + f'/epoch={5 if epoch == 5 else epoch - 5}'
-                    if not os.path.exists(log_save_path):
-                        os.mkdir(log_save_path)
-                    new_log_save_path = log_save_path if epoch == 5 else self.model_config.log_folder + f'/epoch={epoch}'
-                    os.rename(log_save_path, new_log_save_path)  # 文件夹重命名
-                    for log_path in logs_path:
-                        shutil.copy(log_path, new_log_save_path + f'/{os.path.basename(log_path)}')
-
-                    print('每隔5个epoch重新保存一次_end')
+                self.save_epoch_mode_5(epoch)
 
             print('已完成所有训练批次~')
         else:
             # 测试阶段
             with torch.no_grad():
                 self.__test()
+
+    def save_epoch_mode_5(self, epoch):
+        if epoch % 5 == 0:
+            print('每隔5个epoch重新保存一次_start')
+            weights_path = glob.glob(self.model_config.checkpoint_folder + '/*.pth')
+            weight_save_path = self.model_config.checkpoint_folder + f'/epoch={5 if epoch == 5 else epoch - 5}'
+            if not os.path.exists(weight_save_path):
+                os.mkdir(weight_save_path)
+            new_weight_save_path = weight_save_path if epoch == 5 else self.model_config.checkpoint_folder + f'/epoch={epoch}'
+            os.rename(weight_save_path, new_weight_save_path)  # 文件夹重命名
+            for weight_path in weights_path:
+                shutil.copy(weight_path, new_weight_save_path + f'/{os.path.basename(weight_path)}')
+
+            logs_path = glob.glob(self.model_config.log_folder + '/*.txt')
+            log_save_path = self.model_config.log_folder + f'/epoch={5 if epoch == 5 else epoch - 5}'
+            if not os.path.exists(log_save_path):
+                os.mkdir(log_save_path)
+            new_log_save_path = log_save_path if epoch == 5 else self.model_config.log_folder + f'/epoch={epoch}'
+            os.rename(log_save_path, new_log_save_path)  # 文件夹重命名
+            for log_path in logs_path:
+                shutil.copy(log_path, new_log_save_path + f'/{os.path.basename(log_path)}')
+
+            print('每隔5个epoch重新保存一次_end')
