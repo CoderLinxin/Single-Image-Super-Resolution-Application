@@ -69,8 +69,8 @@ def hitsir_pro_experiment(
     # 模型配置
     model_config = HITModelConfig(
         batch_size=batch_size,
-        learning_rate=5e-5,
-        min_learning_rate=2e-6,
+        learning_rate=2e-5,
+        min_learning_rate=1e-7,
         optimizer='Adam',
         optimizer_params={'weight_decay': 0, 'betas': [0.9, 0.99]},
         loss_function=loss,
@@ -82,7 +82,12 @@ def hitsir_pro_experiment(
         train_data_folder='data/train',
         # train_data_name_list=['DIV2K_train_HR'],
         # train_data_name_list=['RealSR(V3)', 'DIV2K_train_HR'],
-        train_data_name_list=['RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR','blend'],
+        train_data_name_list=[
+            'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR',  # 基本训练集
+            # 剩下的训练集会在每个 epoch 的时候随机选取一个来训练(暂时不用)
+            # 'wed1', 'wed2', 'wed3', 'wed4',
+            # 'OST_dataset/animal', 'OST_dataset/building', 'OST_dataset/grass', 'OST_dataset/mountain', 'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water'
+        ],
         # train_data_name_list=['RealSR(V3)'],
         eval_data_folder='data/eval',
         eval_data_name_list=['DIV2K_valid_HR30'],

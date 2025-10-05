@@ -231,8 +231,8 @@ def hitsir_pro_gan_experiment(
     # 模型配置
     model_config = HITModelConfig(
         batch_size=batch_size,
-        learning_rate=5e-5,
-        min_learning_rate=2e-6,
+        learning_rate=2e-5,
+        min_learning_rate=1e-7,
         optimizer='Adam',
         optimizer_params={'weight_decay': 0, 'betas': [0.9, 0.99]},
         loss_function=loss,

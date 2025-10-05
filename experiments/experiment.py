@@ -48,6 +48,10 @@ class Experiment(metaclass=ABCMeta):
         self.eval_data_count = 0  # 统计验证集数据总数
         self.img_transform = transforms.ToPILImage()
 
+        # 每个 epoch 的训练中从以下索引对应的训练集中选取一个来训练
+        # self.train_index = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        # self.current_train_index = 0
+
         # 数据集相关
         self.train_loaders: list[DataLoader] = []
         self.eval_loaders: list[DataLoader] = []
@@ -224,6 +228,8 @@ class Experiment(metaclass=ABCMeta):
                 print('gan 第一个 epoch 训练, 无需加载优化器')
             if type(self).__name__ != 'HITSIRPROGANExperiment':  # 如果是 HITSIRPROGANExperiment 那么 start_epoch 以判别器模型中保存的 start_epoch 为准
                 self.start_epoch = dic['start_epoch'] + 1
+            # if hasattr(dic, 'current_train_index'):
+            #     self.current_train_index = int(dic['current_train_index'])
 
             print(f'模型权重路径: {pretrain_model_path}, 训练 epoch 数: {self.start_epoch - 1}')
             print('============ 加载模型权重 end ============')
@@ -252,6 +258,7 @@ class Experiment(metaclass=ABCMeta):
             'start_epoch': self.start_epoch,  # 存储模型保存时的 epoch
             'model': self.model.state_dict() if model is None else model.state_dict(),
             'optimizer': self.optimizer.state_dict() if optimizer is None else optimizer.state_dict(),
+            # 'current_train_index': self.current_train_index
         }, model_path)
 
     # 初始化优化器、损失函数
@@ -687,10 +694,15 @@ class Experiment(metaclass=ABCMeta):
             data_loader_prev_callback, 遍历每个 data_loader 前的回调
             data_loader_callback, 遍历完每个 data_loader 的回调
         """
+
         # 遍历每一个 dataloader
         for i, dataloader in enumerate(dataloaders):
             total_size = len(dataloader.dataset) - (len(dataloader.dataset) % dataloader.batch_size)
             is_end = i == len(dataloaders) - 1  # 是否是最后一个 data_loader
+
+            # if stage == 'train' and i >= 5:
+            #     if i != self.train_index[self.current_train_index]:
+            #         continue
 
             # 每个 data_loader 遍历前的回调
             if data_loader_prev_callback is not None:
@@ -775,6 +787,8 @@ class Experiment(metaclass=ABCMeta):
                         'ssim': f'{self.test_set_ssim.avg:.6f}',
                         'lpips': f'{self.test_set_lpips.avg:.6f}',
                     })
+
+        # self.current_train_index = (self.current_train_index + 1) % len(self.train_index)
 
     def preprocess_train(self):
         ...
