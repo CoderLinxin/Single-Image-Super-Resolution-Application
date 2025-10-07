@@ -778,7 +778,7 @@ class Experiment(metaclass=ABCMeta):
                         'best epoch': f'{self.best_epoch_psnr_ssim_lpips_log[0]}',
                         'best psnr': f'{self.best_epoch_psnr_ssim_lpips_log[1]:.6f}',
                         'best ssim': f'{self.best_epoch_psnr_ssim_lpips_log[2]:.6f}',
-                        'best ssim_lpips': f'{self.best_epoch_psnr_ssim_lpips_log[3]:.6f}',
+                        'best_lpips': f'{self.best_epoch_psnr_ssim_lpips_log[3]:.6f}',
                     })
                 # 遍历完每个 data_loader 打印测试指标
                 elif stage == 'test':

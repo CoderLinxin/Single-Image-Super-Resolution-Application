@@ -83,7 +83,7 @@ def hitsir_pro_experiment(
         # train_data_name_list=['DIV2K_train_HR'],
         # train_data_name_list=['RealSR(V3)', 'DIV2K_train_HR'],
         train_data_name_list=[
-            'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR',  # 基本训练集
+            'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR'  # 基本训练集
             # 剩下的训练集会在每个 epoch 的时候随机选取一个来训练(暂时不用)
             # 'wed1', 'wed2', 'wed3', 'wed4',
             # 'OST_dataset/animal', 'OST_dataset/building', 'OST_dataset/grass', 'OST_dataset/mountain', 'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water'
