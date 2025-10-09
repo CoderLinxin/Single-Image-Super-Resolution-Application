@@ -89,7 +89,7 @@ def get_bicubic_lr(hr_path: str):
 
 
 # main('data/test/RealSRSet+5images/00003.png')
-# main('data/test/RealSRSet+5images/0014.jpg')
+main('data/test/RealSRSet+5images/0014.jpg')
 # main('data/test/RealSRSet+5images/0030.jpg')
 # main('data/test/RealSRSet+5images/oldphoto2.png')
-main('data/test/RealSRSet+5images/Lincoln.png')
+# main('data/test/RealSRSet+5images/Lincoln.png')
