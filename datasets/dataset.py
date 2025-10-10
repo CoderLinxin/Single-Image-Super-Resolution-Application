@@ -57,7 +57,8 @@ class Dataset(data.Dataset):
         # 读取图像(不需要手动 close)
         img = None
         try:
-            img = Image.open(self.images_path[i], mode='r').convert('RGB')
+            with Image.open(self.images_path[i], mode='r') as img_open:
+                img = img_open.convert('RGB')
         except:
             print(f'错误文件路径:{self.images_path[i]}')
 
