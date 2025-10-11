@@ -66,7 +66,9 @@ def main(img_path: str, device: torch.device = torch.device('cuda:0' if torch.cu
         # 获取 sr 变换
         sr_transform = get_sr_transform()
         # 打开 lr 图片
-        lr = PIL.Image.open(img_path, mode='r').convert('RGB')
+        lr = None
+        with PIL.Image.open(img_path, mode='r') as img_open:
+            lr = img_open.convert('RGB')
         # 对 lr 图片进行变换
         lr = lr_transform(lr).to(device)
         # 输入模型重建出 sr
@@ -79,7 +81,9 @@ def main(img_path: str, device: torch.device = torch.device('cuda:0' if torch.cu
 
 # 根据高分辨率图像生成对应的双三次插值低分辨率图像并保存到磁盘上
 def get_bicubic_lr(hr_path: str):
-    hr = PIL.Image.open(hr_path, mode='r').convert('RGB')
+    hr = None
+    with PIL.Image.open(hr_path, mode='r') as img_open:
+        hr = img_open.convert('RGB')
     lr = hr.resize(
         (hr.width // 4,
          hr.height // 4),

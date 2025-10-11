@@ -59,7 +59,7 @@ class Dataset(data.Dataset):
         try:
             with Image.open(self.images_path[i], mode='r') as img_open:
                 img = img_open.convert('RGB')
-        except:
+        except Exception:
             print(f'错误文件路径:{self.images_path[i]}')
 
         # 获取高分辨率图像
