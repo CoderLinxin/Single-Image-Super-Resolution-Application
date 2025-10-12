@@ -243,6 +243,7 @@ class Experiment(metaclass=ABCMeta):
         # 创建优化器学习率调整器
         # scheduler 构造时会读取优化器的 initial_lr 并保存到内部,并同步一次优化器的学习率(计算出本轮需要使用的正确的学习率(使用了initial_lr)), 后续 step 更新学习率时使用的就是此刻拿到的 initial_lr, 而不是根据优化器上的 initial_lr
         # 假如后续优化器的 initial_lr 发生更改,只要没有重新构造 scheduler, 那么 scheduler.step 更新学习率参考的还是此处拿到的 initial_lr
+        # 如果 optimizer 没有 initial_lr 属性则给其注入一个 initial_lr, 数值为 lr, 如果 optimizer 有 initial_lr,则直接使用
         self.lr_scheduler = get_scheduler(
             optimizer=self.optimizer,
             T_max=self.model_config.epochs,
