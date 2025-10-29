@@ -360,7 +360,8 @@ class SpatialChannelAttention(nn.Module):
             spatial_max.permute(0, 2, 3, 1)
         )).permute(0, 3, 1, 2)  # (b,c,1,1)
 
-        attn = (channel_attn1 * spatial_attn1 + channel_attn2 * spatial_attn2) / 2.
+        # attn = (channel_attn1 * spatial_attn1 + channel_attn2 * spatial_attn2) / 2.
+        attn = (channel_attn1 * spatial_attn1 + channel_attn2 * spatial_attn2)
 
         return attn + x  # (b,c,h,w)
 
