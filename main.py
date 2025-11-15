@@ -6,6 +6,7 @@ from experiments.hitsir_pro_experiment import hitsir_pro_experiment
 from experiments.hitsir_pro_gan_experiment import hitsir_pro_gan_experiment
 from experiments.hitsir_pro测试浅层特征提取2_experiment import hitsir_pro测试浅层特征提取2_experiment
 from experiments.hitsir_pro_gan测试浅层特征提取2_experiment import hitsir_pro_gan测试浅层特征提取2_experiment
+from experiments.hitsir_experiment import hitsir_experiment
 
 
 def main(model_name: str, is_test: bool, **kwargs):
@@ -18,6 +19,8 @@ def main(model_name: str, is_test: bool, **kwargs):
         hitsir_pro测试浅层特征提取2_experiment(is_test, **kwargs)
     if model_name == 'hitsir_pro_gan测试浅层特征提取2':
         hitsir_pro_gan测试浅层特征提取2_experiment(is_test, **kwargs)
+    if model_name == 'hitsir':
+        hitsir_experiment(is_test, **kwargs)
 
 
 if __name__ == '__main__':
@@ -48,13 +51,13 @@ if __name__ == '__main__':
     # 训练 gan 时记得把生成器命名为 new_epoch_model.pth 然后放入 weights 文件夹中
 
     # 验证 div_2k 训练的 psnr,注意 batch_size 增大不会影响验证时间,不是用 div_2k 验证集的原因是计算 lpips 太久太久
-    # main('hitsir_pro测试浅层特征提取2', is_test=False, is_augment=True, loss='l1',
-    #      is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
-    #      epochs=1000, batch_size=16, test_model_name='best_psnr_model.pth',
-    #      # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
-    #      embed_dim=60, base_win_size=[8, 8], depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6],
-    #      mlp_ratio=2, upsampler='pixelshuffledirect', hier_win_ratios=[0.5, 1, 2, 4, 6, 8],
-    #      )
+    main('hitsir_pro测试浅层特征提取2', is_test=False, is_augment=True, loss='l1',
+         is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
+         epochs=1000, batch_size=16, test_model_name='best_psnr_model.pth',
+         # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
+         embed_dim=60, base_win_size=[8, 8], depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6],
+         mlp_ratio=2, upsampler='pixelshuffledirect', hier_win_ratios=[0.5, 1, 2, 4, 6, 8],
+         )
 
     # main('hitsir_pro测试浅层特征提取2', is_test=False, is_augment=True, loss='l1',
     #      is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
@@ -71,3 +74,5 @@ if __name__ == '__main__':
     #      embed_dim=180, base_win_size=[8, 8], depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
     #      mlp_ratio=2, upsampler='nearest+conv', hier_win_ratios=[0.5, 1, 2, 4, 6, 8, 10, 12],
     #      )
+
+    main('hitsir', is_test=False, is_augment=True)
