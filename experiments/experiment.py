@@ -841,6 +841,7 @@ class Experiment(metaclass=ABCMeta):
                 self.preprocess_train()
                 # 训练阶段
                 self.train()
+                torch.cuda.empty_cache()  # 调用此方法释放空闲的显存(这样就不会出现验证时显存比训练时的显存还要大的情况)
                 # 验证阶段
                 with torch.no_grad():
                     self.eval()
