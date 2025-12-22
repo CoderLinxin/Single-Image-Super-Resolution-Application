@@ -32,13 +32,13 @@ if __name__ == '__main__':
     # ImageFile.LOAD_TRUNCATED_IMAGES = True
 
     # 应用模型
-    # main('hitsir_pro', is_test=False, is_augment=True, loss='l1',
-    #      is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
-    #      epochs=400, batch_size=2, test_model_name='best_psnr_ssim_lpips_model.pth',
-    #      # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
-    #      embed_dim=180, base_win_size=[8, 8], depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
-    #      mlp_ratio=2, upsampler='nearest+conv', hier_win_ratios=[0.5, 1, 2, 4, 6, 8, 10, 12],
-    #      )
+    main('hitsir_pro', is_test=False, is_augment=True, loss='l1',
+         is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
+         epochs=400, batch_size=8, test_model_name='best_psnr_ssim_lpips_model.pth',
+         # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
+         embed_dim=180, base_win_size=[8, 8], depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
+         mlp_ratio=2, upsampler='nearest+conv', hier_win_ratios=[0.5, 1, 2, 4, 6, 8, 10, 12],
+         )
 
     # main('hitsir_pro_gan', is_test=False, is_augment=True, loss='l1',
     #      is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
@@ -51,28 +51,12 @@ if __name__ == '__main__':
     # 训练 gan 时记得把生成器命名为 new_epoch_model.pth 然后放入 weights 文件夹中
 
     # 验证 div_2k 训练的 psnr,注意 batch_size 增大不会影响验证时间,不是用 div_2k 验证集的原因是计算 lpips 太久太久
-    main('hitsir_pro测试浅层特征提取2', is_test=False, is_augment=True, loss='l1',
-         is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
-         epochs=1000, batch_size=16, test_model_name='best_psnr_model.pth',
-         # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
-         embed_dim=60, base_win_size=[8, 8], depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6],
-         mlp_ratio=2, upsampler='pixelshuffledirect', hier_win_ratios=[0.5, 1, 2, 4, 6, 8],
-         )
-
     # main('hitsir_pro测试浅层特征提取2', is_test=False, is_augment=True, loss='l1',
     #      is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
-    #      epochs=400, batch_size=2, test_model_name='best_psnr_ssim_lpips_model.pth',
+    #      epochs=1000, batch_size=16, test_model_name='best_psnr_model.pth',
     #      # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
-    #      embed_dim=180, base_win_size=[8, 8], depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
-    #      mlp_ratio=2, upsampler='nearest+conv', hier_win_ratios=[0.5, 1, 2, 4, 6, 8, 10, 12],
-    #      )
-
-    # main('hitsir_pro_gan测试浅层特征提取2', is_test=False, is_augment=True, loss='l1',
-    #      is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
-    #      epochs=200, batch_size=2, test_model_name='best_psnr_ssim_lpips_model.pth',
-    #      # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
-    #      embed_dim=180, base_win_size=[8, 8], depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
-    #      mlp_ratio=2, upsampler='nearest+conv', hier_win_ratios=[0.5, 1, 2, 4, 6, 8, 10, 12],
+    #      embed_dim=60, base_win_size=[8, 8], depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6],
+    #      mlp_ratio=2, upsampler='pixelshuffledirect', hier_win_ratios=[0.5, 1, 2, 4, 6, 8],
     #      )
 
     main('hitsir', is_test=False, is_augment=True)
