@@ -95,7 +95,7 @@ def hitsir_pro测试浅层特征提取2_experiment(
         eval_data_name_list=['Set5'],
         test_data_folder='data/test',
         # test_data_name_list=['Canon', 'Nikon', 'BSD100', 'Urban100'],
-        test_data_name_list=['Urban100'],
+        test_data_name_list=['Manga109'],
         # test_data_name_list=['display_example1', 'display_example2', 'display_example3', 'Canon', 'Nikon', 'BSD100', 'Urban100'],
         # test_data_name_list=['Canon', 'Nikon', 'Set5', 'Set14', 'BSD100', 'Urban100', 'Manga109'],
 
