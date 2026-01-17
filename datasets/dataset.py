@@ -80,13 +80,13 @@ class Dataset(data.Dataset):
         suffix = file_name_suffix[1]  # 获取图片后缀名
 
         # bsrgan 退化模型(lr_imgs 需要重新获取),hr_imgs无变化
-        # if self.config.split == "train":
-        #     # (c,h,w) -> (h,w,c)
-        #     hr_imgs = hr_imgs.permute(1, 2, 0)
-        #     hr_imgs = hr_imgs.numpy()
-        #     lr_imgs, hr_imgs = utils_blindsr.degradation_bsrgan(hr_imgs, self.config.scaling_factor, lq_patchsize=self.config.crop_size, isp_model=None)
-        #     lr_imgs = torch.from_numpy(lr_imgs).permute(2, 0, 1)
-        #     hr_imgs = torch.from_numpy(hr_imgs).permute(2, 0, 1)
+        if self.config.split == "train":
+            # (c,h,w) -> (h,w,c)
+            hr_imgs = hr_imgs.permute(1, 2, 0)
+            hr_imgs = hr_imgs.numpy()
+            lr_imgs, hr_imgs = utils_blindsr.degradation_bsrgan(hr_imgs, self.config.scaling_factor, lq_patchsize=self.config.crop_size, isp_model=None)
+            lr_imgs = torch.from_numpy(lr_imgs).permute(2, 0, 1)
+            hr_imgs = torch.from_numpy(hr_imgs).permute(2, 0, 1)
 
         return lr_imgs, hr_imgs, (filename, suffix)
 
