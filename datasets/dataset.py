@@ -80,7 +80,7 @@ class Dataset(data.Dataset):
         suffix = file_name_suffix[1]  # 获取图片后缀名
 
         # bsrgan 退化模型(lr_imgs 需要重新获取),hr_imgs无变化
-        if self.config.split == "train":
+        if self.config.split == "train" and self.config.is_bsrgan_degrade:
             # (c,h,w) -> (h,w,c)
             hr_imgs = hr_imgs.permute(1, 2, 0)
             hr_imgs = hr_imgs.numpy()

@@ -7,7 +7,8 @@ class DatasetConfig:
             lr_img_type: str = '[0,1]',
             hr_img_type: str = '[0,1]',
             is_lr_amplify: bool = False,
-            is_augment: bool = False
+            is_augment: bool = False,
+            is_bsrgan_degrade: bool = True
     ):
         """
         :param split: 'train' 或者 'eval|test'
@@ -25,6 +26,7 @@ class DatasetConfig:
         self.hr_img_type = hr_img_type
         self.is_lr_amplify = is_lr_amplify
         self.is_augment = is_augment
+        self.is_bsrgan_degrade = is_bsrgan_degrade
 
         # 高分辨率图像上截取的图像块大小
         self.image_size = self.crop_size * self.scaling_factor

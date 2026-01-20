@@ -6,6 +6,7 @@ from experiments.hitsir_pro_experiment import hitsir_pro_experiment
 from experiments.hitsir_pro_gan_experiment import hitsir_pro_gan_experiment
 from experiments.hitsir_pro测试浅层特征提取2_experiment import hitsir_pro测试浅层特征提取2_experiment
 from experiments.hitsir_pro测试浅层特征提取3_experiment import hitsir_pro测试浅层特征提取3_experiment
+from experiments.hitsir_pro测试浅层特征提取3_测试经典超分_experiment import hitsir_pro测试浅层特征提取3_测试经典超分_experiment
 from experiments.hitsir_pro_gan测试浅层特征提取2_experiment import hitsir_pro_gan测试浅层特征提取2_experiment
 from experiments.hitsir_experiment import hitsir_experiment
 
@@ -24,6 +25,8 @@ def main(model_name: str, is_test: bool, **kwargs):
         hitsir_experiment(is_test, **kwargs)
     if model_name == 'hitsir_pro测试浅层特征提取3':
         hitsir_pro测试浅层特征提取3_experiment(is_test, **kwargs)
+    if model_name == 'hitsir_pro测试浅层特征提取3_测试经典超分':
+        hitsir_pro测试浅层特征提取3_测试经典超分_experiment(is_test, **kwargs)
 
 
 if __name__ == '__main__':
@@ -63,6 +66,14 @@ if __name__ == '__main__':
     #      )
 
     # main('hitsir', is_test=False, is_augment=True)
+
+    main('hitsir_pro测试浅层特征提取3_测试经典超分', is_test=False, is_augment=True, is_bsrgan_degrade=False, loss='l1',
+         is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
+         epochs=2000, batch_size=16, test_model_name='best_psnr_model.pth',
+         # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
+         embed_dim=60, base_win_size=[8, 8], depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6],
+         mlp_ratio=2, upsampler='pixelshuffledirect', hier_win_ratios=[0.5, 1, 2, 4, 6, 8],
+         )
 
     main('hitsir_pro测试浅层特征提取3', is_test=False, is_augment=True, loss='l1',
          is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
