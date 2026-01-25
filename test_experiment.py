@@ -6,6 +6,7 @@ from utils.utils import convert_image
 from PIL import Image
 from torchvision import transforms
 from models.hit_sir_pro import HiT_SIR
+# from models.hit_sir_pro测试浅层特征提取3 import HiT_SIR
 from models.bsrgan import RRDBNet
 
 
@@ -112,9 +113,14 @@ def get_bicubic_lr(hr_path: str):
     return lr.save(hr_path.split('.')[-2] + '_lr.png')
 
 
+main(
+    model_type='hit_sir_pro',
+    weight_path='weights/hitsir_pro_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/best_psnr_ssim_lpips_model.pth',
+    img_path='data/test/RealSRSet+5images/0014.jpg'
+)
 # main(
 #     model_type='hit_sir_pro',
-#     weight_path='weights/hitsir_pro_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/best_psnr_ssim_lpips_model.pth',
+#     weight_path='weights/hitsir_pro测试浅层特征提取3_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/best_psnr_ssim_lpips_model.pth',
 #     img_path='data/test/RealSRSet+5images/0014.jpg'
 # )
 # main(
@@ -122,8 +128,8 @@ def get_bicubic_lr(hr_path: str):
 #     weight_path='weights/bsrgan/bsrgan.pth',
 #     img_path='data/test/RealSRSet+5images/0014.jpg'
 # )
-main(
-    model_type='bsrgan',
-    weight_path='weights/bsrgan/bsrnet.pth',
-    img_path='data/test/RealSRSet+5images/0014.jpg'
-)
+# main(
+#     model_type='bsrgan',
+#     weight_path='weights/bsrgan/bsrnet.pth',
+#     img_path='data/test/RealSRSet+5images/0014.jpg'
+# )
