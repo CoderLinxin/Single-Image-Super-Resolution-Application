@@ -69,7 +69,7 @@ def hitsir_pro测试浅层特征提取3_experiment(
     # 模型配置
     model_config = HITModelConfig(
         batch_size=batch_size,
-        learning_rate=4e-5,
+        learning_rate=2e-5,
         min_learning_rate=2e-6,
         optimizer='Adam',
         optimizer_params={'weight_decay': 0, 'betas': [0.9, 0.99]},

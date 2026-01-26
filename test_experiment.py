@@ -128,8 +128,8 @@ main(
 #     weight_path='weights/bsrgan/bsrgan.pth',
 #     img_path='data/test/RealSRSet+5images/0014.jpg'
 # )
-# main(
-#     model_type='bsrgan',
-#     weight_path='weights/bsrgan/bsrnet.pth',
-#     img_path='data/test/RealSRSet+5images/0014.jpg'
-# )
+main(
+    model_type='bsrgan',
+    weight_path='weights/bsrgan/bsrnet.pth',
+    img_path='data/test/RealSRSet+5images/0014.jpg'
+)
