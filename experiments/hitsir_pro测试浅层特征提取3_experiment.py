@@ -71,6 +71,8 @@ def hitsir_pro测试浅层特征提取3_experiment(
         batch_size=batch_size,
         learning_rate=2e-5,
         min_learning_rate=2e-6,
+        # learning_rate=2e-4,
+        # min_learning_rate=2e-5,
         optimizer='Adam',
         optimizer_params={'weight_decay': 0, 'betas': [0.9, 0.99]},
         loss_function=loss,
