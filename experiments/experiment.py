@@ -238,7 +238,7 @@ class Experiment(metaclass=ABCMeta):
         for param_group in self.optimizer.param_groups:
             if "initial_lr" in param_group:
                 param_group['initial_lr'] = self.model_config.learning_rate
-            print(f'同步初始学习率为 {self.model_config.learning_rate}')
+                print(f'同步初始学习率为 {param_group["initial_lr"]}')
 
         # 创建优化器学习率调整器
         # scheduler 构造时会读取优化器的 initial_lr 并保存到内部,并同步一次优化器的学习率(计算出本轮需要使用的正确的学习率(使用了initial_lr)), 后续 step 更新学习率时使用的就是此刻拿到的 initial_lr, 而不是根据优化器上的 initial_lr
