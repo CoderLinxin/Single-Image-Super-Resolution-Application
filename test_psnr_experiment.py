@@ -5,7 +5,8 @@ import torch
 from utils.utils import convert_image
 from PIL import Image
 from torchvision import transforms
-from models.hit_sir_pro测试浅层特征提取2 import HiT_SIR
+# from models.hit_sir_pro测试浅层特征提取2 import HiT_SIR
+from models.hit_sir_pro测试浅层特征提取3 import HiT_SIR
 from skimage.metrics import peak_signal_noise_ratio
 from models.bsrgan import RRDBNet
 
@@ -31,8 +32,8 @@ def create_model(
         return HiT_SIR(
             is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
             # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
-            embed_dim=60, base_win_size=[8, 8], depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6],
-            mlp_ratio=2, upsampler='pixelshuffledirect', hier_win_ratios=[0.5, 1, 2, 4, 6, 8],
+            embed_dim=180, base_win_size=[8, 8], depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
+            mlp_ratio=2, upsampler='nearest+conv', hier_win_ratios=[0.5, 1, 2, 4, 6, 8, 10, 12],
         ).to(torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'))
     elif model_type == 'bsrgan':
         return RRDBNet().to(torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'))
@@ -121,16 +122,16 @@ def get_bicubic_lr(hr_path: str):
     return lr.save(hr_path.split('.')[-2] + '_lr.png')
 
 
-# main(
-#     'data/test/Set5/baby_GT.bmp',
-#     model_type='hit_sir_pro',
-#     weight_path='weights/hitsir_pro测试浅层特征提取2_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(60)_len(depths)(4)_augment/new_epoch_model.pth'
-# )
 main(
-    'data/test/Set5/baby_GT.bmp',
-    model_type='bsrgan',
-    weight_path='weights/bsrgan/bsrgan.pth'
+    'data/test/Set5/bird_GT.bmp',
+    model_type='hit_sir_pro',
+    weight_path='weights/hitsir_pro测试浅层特征提取3_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/best_ssim_model.pth'
 )
+# main(
+#     'data/test/Set5/bird_GT.bmp',
+#     model_type='bsrgan',
+#     weight_path='weights/bsrgan/bsrnet.pth'
+# )
 # main('data/test/Set5/bird_GT.bmp')
 # main('data/test/Set5/butterfly_GT.bmp')
 # main('data/test/Set5/head_GT.bmp')

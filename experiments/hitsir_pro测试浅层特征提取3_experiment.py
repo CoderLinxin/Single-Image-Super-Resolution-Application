@@ -44,8 +44,17 @@ def hitsir_pro测试浅层特征提取3_experiment(
         num_heads,
         mlp_ratio,
         upsampler,
-        hier_win_ratios
+        hier_win_ratios,
+        is_gradient_accurate=False,  # 是否开启梯度累加
+        gradient_accurate_batch_size: int = 0,  # 开启梯度累加时需要达到的实际 batch_size 大小(需要是 batch_size 的整数倍)
 ):
+    # 梯度累加
+    if is_gradient_accurate:
+        assert gradient_accurate_batch_size / batch_size == int(
+            gradient_accurate_batch_size / batch_size), f'gradient_accurate_batch_size={gradient_accurate_batch_size} 不能被 batch_size=={batch_size} 整除'
+    else:
+        gradient_accurate_batch_size = batch_size
+
     # 数据集配置
     train_data_config = DatasetConfig(
         split='train',
@@ -70,9 +79,9 @@ def hitsir_pro测试浅层特征提取3_experiment(
     model_config = HITModelConfig(
         batch_size=batch_size,
         learning_rate=2e-5,
-        min_learning_rate=2e-6,
+        min_learning_rate=2e-7,
         # learning_rate=2e-4,
-        # min_learning_rate=2e-5,
+        # min_learning_rate=6e-6,
         optimizer='Adam',
         optimizer_params={'weight_decay': 0, 'betas': [0.9, 0.99]},
         loss_function=loss,
@@ -122,7 +131,9 @@ def hitsir_pro测试浅层特征提取3_experiment(
         eval_data_config=eval_data_config,
         test_data_config=test_data_config,
         model_config=model_config,
-        is_test=is_test
+        is_test=is_test,
+        is_gradient_accurate=is_gradient_accurate,
+        gradient_accurate_batch_size=gradient_accurate_batch_size,
     )
 
     # 运行实验

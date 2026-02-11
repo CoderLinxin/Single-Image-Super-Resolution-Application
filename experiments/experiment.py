@@ -30,6 +30,8 @@ class Experiment(metaclass=ABCMeta):
             test_data_config: DatasetConfig,
             model_config: ModelConfig | UNetModelConfig | DenseModelConfig | HITModelConfig,
             is_test: bool,
+            is_gradient_accurate,
+            gradient_accurate_batch_size
     ):
         """
         :param train_data_config: 训练数据配置
@@ -38,6 +40,10 @@ class Experiment(metaclass=ABCMeta):
         :param model_config: 模型配置
         :param is_test: 是否处于测试阶段
         """
+        self.is_gradient_accurate = is_gradient_accurate
+        self.gradient_accurate_batch_size = gradient_accurate_batch_size
+        self.accurate_iter = int(gradient_accurate_batch_size / model_config.batch_size)  # 需要累积的迭代次数
+        self.train_iter_counter = 0  # 训练迭代计数
         self.train_data_config = train_data_config
         self.eval_data_config = eval_data_config
         self.test_data_config = test_data_config
@@ -368,16 +374,21 @@ class Experiment(metaclass=ABCMeta):
             sr_imgs: torch.Tensor,  # (b,c,h,w)
             _: str, __: str, ___: str
     ) -> dict:
-        # 清空梯度
-        self.optimizer.zero_grad()
+        self.train_iter_counter += 1
+
         # 计算 loss
-        loss = self.loss_function(input=sr_imgs, target=hr_imgs)
+        loss = self.loss_function(input=sr_imgs, target=hr_imgs) / self.accurate_iter
         # 更新梯度
         loss.backward()
-        # 更新参数
-        self.optimizer.step()
+        # 是否开启梯度累积
+        if not self.is_gradient_accurate or self.accurate_iter <= self.train_iter_counter:
+            # 更新参数
+            self.optimizer.step()
+            # 清空梯度
+            self.optimizer.zero_grad()
+            self.train_iter_counter = 0
         # 更新损失
-        self.epoch_loss.update(loss.item(), len(hr_imgs))
+        self.epoch_loss.update(loss.item() * self.accurate_iter, len(hr_imgs))
 
     # 训练过程中遍历完每一个 dataloaders 的回调
     def train_dataloader_process(
@@ -422,6 +433,10 @@ class Experiment(metaclass=ABCMeta):
         # 重置训练指标
         self.epoch_loss.reset()
         self.train_start_time = time.time()
+
+        # 清空梯度
+        self.optimizer.zero_grad()
+        self.train_iter_counter = 0
 
         # 遍历所有的 train_loader
         self.__dataloaders_traverse(
