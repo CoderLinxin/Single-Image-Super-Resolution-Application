@@ -79,7 +79,7 @@ def hitsir_pro测试浅层特征提取3_experiment(
     model_config = HITModelConfig(
         batch_size=batch_size,
         learning_rate=2e-5,
-        min_learning_rate=2e-7,
+        min_learning_rate=2e-6,
         # learning_rate=2e-4,
         # min_learning_rate=6e-6,
         optimizer='Adam',
@@ -95,12 +95,14 @@ def hitsir_pro测试浅层特征提取3_experiment(
         # train_data_name_list=['RealSR(V3)', 'DIV2K_train_HR'],
         train_data_name_list=[
             # 基本训练集
-            'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR', 'face', 'REDS2K',
-            '城市风景', '城市泊油路', '迪拜旅游城市', '日本庭院', '铁轨铁路', '乌克兰城市建筑', '自然风景'
+            # 'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR', 'face', 'REDS2K',
+            # '城市风景', '城市泊油路', '迪拜旅游城市', '日本庭院', '铁轨铁路', '乌克兰城市建筑', '自然风景'
 
-            # 剩下的训练集会在每个 epoch 的时候随机选取一个来训练(暂时不用)
-            # 'wed1', 'wed2', 'wed3', 'wed4',
-            # 'OST_dataset/animal', 'OST_dataset/building', 'OST_dataset/grass', 'OST_dataset/mountain', 'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water'
+            # 其他训练集
+            'wed1', 'wed2', 'wed3', 'wed4',
+            'OST_dataset/animal', 'OST_dataset/building',
+            'OST_dataset/grass', 'OST_dataset/mountain',
+            'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water'
         ],
         # train_data_name_list=['RealSR(V3)'],
         eval_data_folder='data/eval',

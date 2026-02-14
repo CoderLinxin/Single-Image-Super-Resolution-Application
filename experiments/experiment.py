@@ -30,8 +30,8 @@ class Experiment(metaclass=ABCMeta):
             test_data_config: DatasetConfig,
             model_config: ModelConfig | UNetModelConfig | DenseModelConfig | HITModelConfig,
             is_test: bool,
-            is_gradient_accurate,
-            gradient_accurate_batch_size
+            is_gradient_accurate=False,
+            gradient_accurate_batch_size=0
     ):
         """
         :param train_data_config: 训练数据配置
@@ -232,10 +232,8 @@ class Experiment(metaclass=ABCMeta):
                 print('加载优化器')
             else:
                 print('gan 第一个 epoch 训练, 无需加载优化器')
-            if type(self).__name__ != 'HITSIRPROGANExperiment':  # 如果是 HITSIRPROGANExperiment 那么 start_epoch 以判别器模型中保存的 start_epoch 为准
+            if 'gan' not in type(self).__name__.lower():  # 如果是 gan 模型 那么 start_epoch 以判别器模型中保存的 start_epoch 为准
                 self.start_epoch = dic['start_epoch'] + 1
-            # if hasattr(dic, 'current_train_index'):
-            #     self.current_train_index = int(dic['current_train_index'])
 
             print(f'模型权重路径: {pretrain_model_path}, 训练 epoch 数: {self.start_epoch - 1}')
             print('============ 加载模型权重 end ============')
@@ -324,7 +322,7 @@ class Experiment(metaclass=ABCMeta):
         if os.path.exists(self.lr_log_path):
             self.lr_log = np.loadtxt(self.lr_log_path, dtype=str).tolist()
             print(f'{os.path.basename(self.lr_log_path).split(".")[0]}加载完毕~')
-        if type(self).__name__ != 'HITSIRPROGANExperiment':
+        if 'gan' not in type(self).__name__.lower():
             # 有可能本轮更改了初始学习率,导致上一轮 epoch 记录的本轮使用的学习率旧了,需要同步下
             self.lr_log[-1] = f"epoch:{self.start_epoch},lr:{format_str(self.optimizer.param_groups[0]['lr'], 25)}"
         if os.path.exists(self.train_eval_seconds_consume_log_path):
@@ -413,12 +411,12 @@ class Experiment(metaclass=ABCMeta):
         self.total_seconds_consume_log[0] += train_time
 
         # 每个epoch结束保存最新模型
-        self.save_model_weights(model_path=self.new_model_path)
+        if 'gan' not in type(self).__name__.lower():
+            self.save_model_weights(model_path=self.new_model_path)
 
         # 保存训练指标
-        if type(self).__name__ != 'HITSIRPROGANExperiment':
+        if 'gan' not in type(self).__name__.lower():
             np.savetxt(self.loss_log_path, self.loss_log, fmt='%s')  # 文件不存在会自动创建相应的文件
-        if type(self).__name__ != 'HITSIRPROGANExperiment':
             np.savetxt(self.lr_log_path, self.lr_log, fmt='%s')
         np.savetxt(self.train_eval_seconds_consume_log_path, self.train_eval_seconds_consume_log, fmt='%s')
 
@@ -776,7 +774,7 @@ class Experiment(metaclass=ABCMeta):
 
                 # 所有 data_loader 遍历完打印训练指标
                 if stage == 'train' and is_end:
-                    if type(self).__name__ == 'HITSIRPROGANExperiment':
+                    if 'gan' in type(self).__name__.lower():
                         t.set_postfix({
                             'g_loss': f'{self.epoch_loss.avg:.6f}',
                             'd_loss': f'{self.epoch_discriminator_loss.avg:.6f}'

@@ -3,5 +3,6 @@
 /weights/hitsir_pro_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment
 /weights/hitsir_pro测试浅层特征提取2_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment
 /weights/hitsir_pro测试浅层特征提取3_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment
+/weights/hitsir_pro测试浅层特征提取3_gan_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment
 /weights/bsrgan
 /results
