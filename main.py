@@ -81,6 +81,7 @@ if __name__ == '__main__':
     # 1~113: batch_size = 4
     # 114~: batch_size = 2
     # 272~300: 使用梯度累加
+    # 340~: 使用其他数据集训练
     main('hitsir_pro测试浅层特征提取3', is_test=False, is_augment=True, loss='l1',
          is_gradient_accurate=False, gradient_accurate_batch_size=0,
          is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
