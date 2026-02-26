@@ -206,6 +206,9 @@ class HITSIRPRO测试浅层特征提取3GANExperiment(Experiment):
     ):
         super(HITSIRPRO测试浅层特征提取3GANExperiment, self).train_dataloader_process(is_end, _)
 
+        if not is_end:
+            return
+
         # 每个epoch结束更新一次学习率
         self.lr_discriminator_scheduler.step()
 
@@ -285,12 +288,21 @@ def hitsir_pro测试浅层特征提取3_gan_experiment(
         log_folder=f'logs/{folder_name}',
         train_data_folder='data/train',
         train_data_name_list=[
-            # 基本训练集
-            'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'wuthering_wave', 'Flickr2K_HR', 'face', 'REDS2K',
-            '城市风景', '城市泊油路', '迪拜旅游城市', '日本庭院', '铁轨铁路', '乌克兰城市建筑', '自然风景'
+            # 训练集1
+            # 'subimages/blend', 'subimages/DIV2K_train_HR',
 
-            # 剩下的训练集会在每个 epoch 的时候随机选取一个来训练(暂时不用)
-            # 'wed1', 'wed2', 'wed3', 'wed4',
+            # 训练集2
+            'subimages/face', 'subimages/RealSR(V3)',
+            'wed1', 'wed2', 'wed3',
+
+            # 训练集3
+            # 'subimages/Flickr2K_HR1',
+
+            # 训练集4
+            # 'subimages/Flickr2K_HR2',
+
+            # 训练集5
+            # 'wed4',
             # 'OST_dataset/animal', 'OST_dataset/building', 'OST_dataset/grass', 'OST_dataset/mountain', 'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water'
         ],
         eval_data_folder='data/eval',

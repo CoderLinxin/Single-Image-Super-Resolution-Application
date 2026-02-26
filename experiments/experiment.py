@@ -49,7 +49,7 @@ class Experiment(metaclass=ABCMeta):
         self.test_data_config = test_data_config
         self.model_config = model_config
         self.is_test = is_test
-        self.lpips_fn = lpips.LPIPS(net='vgg')
+        self.lpips_fn = lpips.LPIPS(net='vgg').to(self.model_config.device)
 
         self.eval_data_count = 0  # 统计验证集数据总数
         self.img_transform = transforms.ToPILImage()
@@ -479,7 +479,7 @@ class Experiment(metaclass=ABCMeta):
             sr_img_y,
             data_range=1,
         )
-        lpips = self.lpips_fn(torch.from_numpy(hr_img_y), torch.from_numpy(sr_img_y))
+        lpips = self.lpips_fn(torch.from_numpy(hr_img_y).to(self.model_config.device), torch.from_numpy(sr_img_y).to(self.model_config.device))
 
         is_psnr_nan = False
         is_ssim_nan = False
