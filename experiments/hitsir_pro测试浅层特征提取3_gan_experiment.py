@@ -148,6 +148,8 @@ class HITSIRPRO测试浅层特征提取3GANExperiment(Experiment):
             sr_imgs: torch.Tensor,  # (b,c,h,w)
             _: str, __: str, ___: str
     ) -> dict:
+        self.train_iter_counter += 1
+
         # ------------------------------------
         # 优化生成器
         # ------------------------------------
@@ -292,11 +294,11 @@ def hitsir_pro测试浅层特征提取3_gan_experiment(
             # 'subimages/blend', 'subimages/DIV2K_train_HR',
 
             # 训练集2
-            'subimages/face', 'subimages/RealSR(V3)',
-            'wed1', 'wed2', 'wed3',
+            # 'subimages/face', 'subimages/RealSR(V3)',
+            # 'wed1', 'wed2', 'wed3',
 
             # 训练集3
-            # 'subimages/Flickr2K_HR1',
+            'subimages/Flickr2K_HR1',
 
             # 训练集4
             # 'subimages/Flickr2K_HR2',

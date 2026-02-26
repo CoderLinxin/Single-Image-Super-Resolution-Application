@@ -97,7 +97,7 @@ if __name__ == '__main__':
     #      )
 
     main('hitsir_pro测试浅层特征提取3_gan', is_test=False, is_augment=True, loss='l1',
-         is_gradient_accurate=False, gradient_accurate_batch_size=0,
+         is_gradient_accurate=True, gradient_accurate_batch_size=4,
          is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
          epochs=200, batch_size=2, test_model_name='best_psnr_ssim_lpips_model.pth',
          # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍

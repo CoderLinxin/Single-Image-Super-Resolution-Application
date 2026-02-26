@@ -178,12 +178,14 @@ def convert_image(img: Image, source: str, target: str, is_lr, is_lr_amplify, sc
             #     img = 16. / 255 + (
             #             65.738 * img[:, 0, :, :] + 129.057 * img[:, 1, :, :] + 25.064 * img[:, 2, :, :]) / 256.
             img = 16. / 255 + (65.738 * img[:, 0, :, :] + 129.057 * img[:, 1, :, :] + 25.064 * img[:, 2, :, :]) / 256.
+            # img = 16. / 255 + (65.481 * img[:, 0, :, :] + 128.553 * img[:, 1, :, :] + 24.966 * img[:, 2, :, :]) / 255.
         elif len(img.shape) == 3:
             # if not is_test:
             #     img = 16. + (65.738 * img[0, :, :] + 129.057 * img[1, :, :] + 25.064 * img[2, :, :]) / 256.
             # else:
             #     img = 16. / 255 + (65.738 * img[0, :, :] + 129.057 * img[1, :, :] + 25.064 * img[2, :, :]) / 256.
             img = 16. / 255 + (65.738 * img[0, :, :] + 129.057 * img[1, :, :] + 25.064 * img[2, :, :]) / 256.
+            # img = 16. / 255 + (65.481 * img[0, :, :] + 128.553 * img[1, :, :] + 24.966 * img[2, :, :]) / 255.
 
     return img
 
@@ -263,6 +265,13 @@ class ImageTransforms(object):
                 right = img.width - (x_remainder - left)
                 bottom = img.height - (y_remainder - top)
                 box = (left, top, right, bottom)
+
+                # 从原图中尽可能大地左上裁剪(国际惯例)出大小能被 scaling_factor 整除的图像块
+                # x_remainder = img.width % self.scaling_factor
+                # y_remainder = img.height % self.scaling_factor
+                # right = img.width - x_remainder
+                # bottom = img.height - y_remainder
+                # box = (0, 0, right, bottom)
 
             # 根据 box 作裁剪
             result = img.crop(box)

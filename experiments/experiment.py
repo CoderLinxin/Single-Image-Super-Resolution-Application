@@ -585,6 +585,7 @@ class Experiment(metaclass=ABCMeta):
         )
 
     # 测试过程中遍历每个batch的回调
+    # 国际惯例测试实现: 从左上角开始裁剪能被 4 整除的最大的图像,接着裁剪四周边缘(上下左右) 4 个像素,最后才进行 psnr 的计算,但目前仍然采取最初的测试方案
     def test_batch_process(
             self,
             hr_img: torch.Tensor,  # (1,c,h,w)
@@ -593,6 +594,10 @@ class Experiment(metaclass=ABCMeta):
             suffix: str,
             dataloader_name: str
     ) -> dict:
+        # 裁剪四周边缘(上下左右)像素再进行后续测试(国际惯例)
+        # hr_img = hr_img[..., self.model_config.scaling_factor:-self.model_config.scaling_factor, self.model_config.scaling_factor:-self.model_config.scaling_factor]
+        # sr_img = sr_img[..., self.model_config.scaling_factor:-self.model_config.scaling_factor, self.model_config.scaling_factor:-self.model_config.scaling_factor]
+
         # 转换为 ycbcr 中的 y 通道
         hr_img_y = convert_image(
             hr_img,
@@ -624,7 +629,7 @@ class Experiment(metaclass=ABCMeta):
             data_range=1,
             gaussian_weights=True
         )
-        lpips = self.lpips_fn(torch.from_numpy(hr_img_y), torch.from_numpy(sr_img_y))
+        lpips = self.lpips_fn(torch.from_numpy(hr_img_y).to(self.model_config.device), torch.from_numpy(sr_img_y).to(self.model_config.device))
 
         # 更新测试指标
         self.test_set_psnr.update(psnr, len(hr_img))
