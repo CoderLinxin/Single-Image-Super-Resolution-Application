@@ -17,7 +17,7 @@ from utils.utils import ImageTransforms, get_augment_param, augment
 to_pil_transform = transforms.ToPILImage()
 to_tensor_transform = transforms.ToTensor()
 
-test_data_name = 'data/test/Manga109'
+test_data_name = 'data/test/Set14'
 hrs_path = glob.glob(test_data_name + '/*')
 
 test_set_psnr = AverageMeter()
@@ -42,7 +42,7 @@ for hr_path in hrs_path:
             print(f'h:{hr.width},w:{hr.height}不能被4整除')
         hr, _ = hr_transform(hr)
         hr = hr.clip(0, 1)
-    sr_path = hr_path.replace('Manga109', 'Manga109_swinir_sr')
+    sr_path = hr_path.replace('Set14', 'Set14_swinir_sr')
     # names = os.path.basename(sr_path).split('.')[0].split('_')
     # sr_path = sr_path.replace(os.path.basename(sr_path), names[0] + names[1] + 'x4_SwinIR' + '.png')
     sr_path = sr_path.replace(os.path.basename(sr_path), os.path.basename(sr_path).split('.')[0] + 'x4_SwinIR' + '.png')
