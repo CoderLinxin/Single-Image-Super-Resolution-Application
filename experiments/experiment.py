@@ -594,20 +594,17 @@ class Experiment(metaclass=ABCMeta):
             suffix: str,
             dataloader_name: str
     ) -> dict:
-        # 裁剪四周边缘(上下左右)像素再进行后续测试(国际惯例)
-        # hr_img = hr_img[..., self.model_config.scaling_factor:-self.model_config.scaling_factor, self.model_config.scaling_factor:-self.model_config.scaling_factor]
-        # sr_img = sr_img[..., self.model_config.scaling_factor:-self.model_config.scaling_factor, self.model_config.scaling_factor:-self.model_config.scaling_factor]
-
         # 转换为 ycbcr 中的 y 通道
         hr_img_y = convert_image(
-            hr_img,
+            # 裁剪四周边缘(上下左右)像素再进行后续测试(国际惯例)
+            hr_img[..., self.train_data_config.scaling_factor:-self.train_data_config.scaling_factor, self.train_data_config.scaling_factor:-self.train_data_config.scaling_factor],
             source='[0,1]',
             target='y-channel',
             is_test=True,
             is_lr=False, is_lr_amplify=False, scaling_factor=4
         ).squeeze(0)  # (1,h,w)
         sr_img_y = convert_image(
-            sr_img,
+            sr_img[..., self.train_data_config.scaling_factor:-self.train_data_config.scaling_factor, self.train_data_config.scaling_factor:-self.train_data_config.scaling_factor],
             source='[0,1]',
             target='y-channel',
             is_test=True,
