@@ -298,10 +298,10 @@ def hitsir_pro测试浅层特征提取3_gan_experiment(
             # 'wed1', 'wed2', 'wed3',
 
             # 训练集3
-            'subimages/Flickr2K_HR1',
+            # 'subimages/Flickr2K_HR1',
 
             # 训练集4
-            # 'subimages/Flickr2K_HR2',
+            'subimages/Flickr2K_HR2',
 
             # 训练集5
             # 'wed4',

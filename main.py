@@ -11,6 +11,7 @@ from experiments.hitsir_pro测试浅层特征提取3_测试经典超分_experime
 from experiments.hitsir_pro_gan测试浅层特征提取2_experiment import hitsir_pro_gan测试浅层特征提取2_experiment
 from experiments.hitsir_experiment import hitsir_experiment
 from experiments.rrdb_experiment import rrdb_experiment
+from experiments.swinir_experiment import swinir_experiment
 
 
 def main(model_name: str, is_test: bool, **kwargs):
@@ -33,6 +34,8 @@ def main(model_name: str, is_test: bool, **kwargs):
         hitsir_pro测试浅层特征提取3_测试经典超分_experiment(is_test, **kwargs)
     if model_name == 'rrdb':
         rrdb_experiment(is_test, **kwargs)
+    if model_name == 'swinir':
+        swinir_experiment(is_test, **kwargs)
 
 
 if __name__ == '__main__':
@@ -82,6 +85,7 @@ if __name__ == '__main__':
     #      )
 
     # main('rrdb', is_test=False, is_augment=True)
+    # main('swinir', is_test=True, is_augment=True)
 
     # 1~113: batch_size = 4
     # 114~: batch_size = 2
