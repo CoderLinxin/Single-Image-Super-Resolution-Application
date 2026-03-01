@@ -301,11 +301,15 @@ def hitsir_pro测试浅层特征提取3_gan_experiment(
             # 'subimages/Flickr2K_HR1',
 
             # 训练集4
-            'subimages/Flickr2K_HR2',
+            # 'subimages/Flickr2K_HR2',
 
             # 训练集5
             # 'wed4',
             # 'OST_dataset/animal', 'OST_dataset/building', 'OST_dataset/grass', 'OST_dataset/mountain', 'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water'
+
+            # 训练集6
+            'wuthering_wave', 'REDS2K', 'Z1500PX', '2000PXA', '2000PXB', '2000PXC', '2000PXE',
+            '城市风景', '城市泊油路', '迪拜旅游城市', '日本庭院', '铁轨铁路', '乌克兰城市建筑', '自然风景'
         ],
         eval_data_folder='data/eval',
         eval_data_name_list=['DIV2K_valid_HR10'],
