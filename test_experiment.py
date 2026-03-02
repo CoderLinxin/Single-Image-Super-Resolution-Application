@@ -118,15 +118,15 @@ def get_bicubic_lr(hr_path: str):
 #     weight_path='weights/hitsir_pro_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/best_psnr_ssim_lpips_model.pth',
 #     img_path='data/test/RealSRSet+5images/0014.jpg'
 # )
-main(
-    model_type='hit_sir_pro',
-    weight_path='weights/hitsir_pro测试浅层特征提取3_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/best_ssim_model.pth',
-    img_path='data/test/RealSRSet+5images/0014.jpg'
-)
+# main(
+#     model_type='hit_sir_pro',
+#     weight_path='weights/hitsir_pro测试浅层特征提取3_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/best_ssim_model.pth',
+#     img_path='data/test/网上图片/10.jpeg'
+# )
 main(
     model_type='hit_sir_pro',
     weight_path='weights/hitsir_pro测试浅层特征提取3_gan_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/new_epoch_model.pth',
-    img_path='data/test/RealSRSet+5images/0014.jpg'
+    img_path='data/test/网上图片/16.jpg'
 )
 # main(
 #     model_type='bsrgan',
