@@ -19,12 +19,12 @@ def image_block_handle(
     :param tile_overlap: 相邻切块之间的重叠区域
     :return 输出超分结果 (c,4*h,4*w)
     """
-    window_size = 8  # 确保分块大小是 window_size 的倍数
+    # window_size = 8  # 确保分块大小是 window_size 的倍数
 
     # 输入图像处理逻辑
     c, h, w = img.size()  # 获取输入图像的高度、宽度和通道数
     tile = min(tile, h, w)  # 切块的大小，不能超过图像的高度和宽度
-    assert tile % window_size == 0, "tile size should be a multiple of window_size"  # 确保切块大小是 window_size 的倍数
+    # assert tile % window_size == 0, "tile size should be a multiple of window_size"  # 确保切块大小是 window_size 的倍数
     stride = tile - tile_overlap  # 每次切块移动的步长，确保切块间存在重叠区域    256-32 = 224
 
     # 切块会从图像的左上角开始，按步长（224）逐步生成切块的位置。对于 1024x1280 的图像，这样会生成多个 tile，每次切块的起始位置会偏移 224 像素

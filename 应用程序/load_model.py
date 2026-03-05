@@ -18,6 +18,7 @@ model = HiT_SIR(
 # 加载模型参数
 print('============ 加载模型权重 start ============')
 pretrain_model_path = '../weights/hitsir_pro测试浅层特征提取3_gan_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/new_epoch_model.pth'
+# pretrain_model_path = '../weights/hitsir_pro测试浅层特征提取3_gan_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/epoch=105/new_epoch_model.pth'
 dic = torch.load(
     pretrain_model_path,
     map_location=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'), weights_only=True

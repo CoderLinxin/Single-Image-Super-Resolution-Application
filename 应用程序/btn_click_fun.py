@@ -153,11 +153,11 @@ def start_button_click_handle(
     """
 
     # 运行前的相关检查
-    # 1.图像分块大小检查: 输入图像大小 >= 图像分块大小
+    # 1.输入图像大小 >= 32x32
     input_image_size = input_image_size_var.get().split('x')
-    if int(input_image_size[0]) < int(image_block_var.get()) or int(input_image_size[1]) < int(image_block_var.get()):
+    if int(input_image_size[0]) < 32 or int(input_image_size[1]) < 32:
         # 弹出提示框
-        tkinter.messagebox.showerror("输入图像错误", f"输入图像大小 {input_image_size_var.get()} < 图像分块大小 {image_block_var.get()}x{image_block_var.get()}")
+        tkinter.messagebox.showerror("输入图像错误", f"输入图像大小 {input_image_size_var.get()} < 32x32")
         return
 
     # 禁用交互
@@ -169,7 +169,7 @@ def start_button_click_handle(
 
     time_start = time.time()
     # 进度重置
-    image_progress_var.set(0), image_progress_text_var.set(f'0%')
+    image_progress_var.set(0), image_progress_text_var.set(f'0%'), window.update()
     # 重置输出图像
     output_image_label, output_image_placeholder = get_output_image_label_and_placeholder()
     output_image_label.config(image=output_image_placeholder)
@@ -185,7 +185,7 @@ def start_button_click_handle(
         lr_img, inference,
         lambda block_count: before_progress(image_progress_bar, block_count),  # 更新进度条总长度
         lambda block_count, current_block_index: update_progress(block_count, current_block_index, image_progress_var, image_progress_text_var, window),  # 更新进度
-        int(image_block_var.get()), tile_overlap=32
+        int(image_block_var.get()), tile_overlap=16
     )
     # 进度置1
     image_progress_var.set(block_count), image_progress_text_var.set(f'100%')
