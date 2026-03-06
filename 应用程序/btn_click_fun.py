@@ -3,6 +3,9 @@ import time
 import tkinter
 from tkinter import filedialog
 import os
+
+import torch.cuda
+
 from load_model import *
 from image_block_handle import *
 from PIL import Image, ImageTk
@@ -153,9 +156,9 @@ def start_button_click_handle(
     """
 
     # 运行前的相关检查
-    # 1.输入图像大小 >= 32x32
+    # 1.输入图像大小 >= 64x64
     input_image_size = input_image_size_var.get().split('x')
-    if int(input_image_size[0]) < 32 or int(input_image_size[1]) < 32:
+    if int(input_image_size[0]) < 64 or int(input_image_size[1]) < 64:
         # 弹出提示框
         tkinter.messagebox.showerror("输入图像错误", f"输入图像大小 {input_image_size_var.get()} < 32x32")
         return
@@ -187,6 +190,8 @@ def start_button_click_handle(
         lambda block_count, current_block_index: update_progress(block_count, current_block_index, image_progress_var, image_progress_text_var, window),  # 更新进度
         int(image_block_var.get()), tile_overlap=16
     )
+    # 执行完图像超分后清除 GPU 显存
+    torch.cuda.empty_cache()
     # 进度置1
     image_progress_var.set(block_count), image_progress_text_var.set(f'100%')
     # 转换为 pil_image
@@ -206,7 +211,7 @@ def start_button_click_handle(
     # 重新启用交互
     select_image_button['state'] = 'normal'
     save_image_button['state'] = 'normal'
-    image_block_combobox['state'] = 'normal'
+    image_block_combobox['state'] = 'readonly'
     save_image_filename_entry['state'] = 'normal'
     get_start_button()['state'] = 'normal'
 

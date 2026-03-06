@@ -71,7 +71,7 @@ output_image_size_text.grid(row=2, column=6, sticky='e')
 output_image_size.grid(row=2, column=7, sticky='w', padx=15)
 
 image_block_text = ttk.Label(window, text='图像分块大小 :')
-image_block_combobox = ttk.Combobox(state='readonly', values=[32, 64, 128, 256, 512, 1024], textvariable=image_block_var)
+image_block_combobox = ttk.Combobox(state='readonly', values=[64, 128, 256, 512, 1024], textvariable=image_block_var)
 save_image_filename_text = ttk.Label(window, text='保存文件名称 :')
 save_image_filename_entry = ttk.Entry(window, width=40, textvariable=save_image_filename_var)
 image_block_text.grid(row=3, column=1, pady=10, sticky='e')
