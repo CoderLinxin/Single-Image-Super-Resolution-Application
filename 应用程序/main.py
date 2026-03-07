@@ -17,7 +17,7 @@ select_image_text_var = ttk.StringVar(value='未选择图像')  # 选择图像�
 save_image_text_var = ttk.StringVar(value='无')  # 保存图像文本
 input_image_size_var = ttk.StringVar(value='0x0')  # 输入图像大小
 output_image_size_var = ttk.StringVar(value='0x0')  # 输出图像大小
-image_block_var = ttk.StringVar(value=128)  # 图像分块大小
+image_block_var = ttk.StringVar(value=256)  # 图像分块大小
 save_image_filename_var = ttk.StringVar()  # 保存文件名
 image_progress_var = ttk.IntVar(value=0)  # 当前进度
 image_progress_text_var = ttk.StringVar(value='0%')  # 当前进度文本

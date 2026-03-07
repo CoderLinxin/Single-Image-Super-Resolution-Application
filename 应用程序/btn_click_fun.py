@@ -55,7 +55,7 @@ def select_image_button_click_handle(
     :param get_output_image_label: 获取显示输出图像的 label 以及占位图
     """
     # 选择一个文件
-    filetypes = [('PNG图片', '*.png'), ('JPEG图片', '*.jpeg'), ('JPG图片', '*.jpg')]
+    filetypes = [('PNG图片', '*.png'), ('JPEG图片', '*.jpeg'), ('JPG图片', '*.jpg'), ('bmp图片', '*.bmp'), ]
     file_path = filedialog.askopenfilename(title='选择图像', filetypes=filetypes)
     if file_path != '':
         img = None
