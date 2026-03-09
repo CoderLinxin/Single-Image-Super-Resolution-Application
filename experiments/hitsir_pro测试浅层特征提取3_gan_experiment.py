@@ -307,20 +307,34 @@ def hitsir_pro测试浅层特征提取3_gan_experiment(
             # 'wed4',
             # 'OST_dataset/animal', 'OST_dataset/building', 'OST_dataset/grass', 'OST_dataset/mountain', 'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water'
 
-            # 训练集6
-            # 'wuthering_wave', 'REDS2K', 'Z1500PX', '2000PXA', '2000PXB', '2000PXC', '2000PXE', *(['动漫图片'] * 3),
+            # 训练集6(针对现实世界图像超分)
             # '城市风景', '城市泊油路', '迪拜旅游城市', '日本庭院', '铁轨铁路', '乌克兰城市建筑', '自然风景',
-
-            # 训练集7(针对现实世界图像超分)
-            'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'Flickr2K_HR', 'face', 'REDS2K',
-            '城市风景', '城市泊油路', '迪拜旅游城市', '日本庭院', '铁轨铁路', '乌克兰城市建筑', '自然风景',
+            # 'REDS2K', 'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'Flickr2K_HR', 'face',
             # 'wed1', 'wed2', 'wed3', 'wed4',
             # 'OST_dataset/animal', 'OST_dataset/building',
             # 'OST_dataset/grass', 'OST_dataset/mountain',
             # 'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water',
 
-            # 训练集8(针对动漫图像超分)
+            # 训练集7(针对动漫图像超分)
             # 'wuthering_wave', 'Z1500PX', '2000PXA', '2000PXB', '2000PXC', '2000PXE', *(['动漫图片'] * 5),
+
+            # 训练集8
+            # 'wuthering_wave', *(['动漫图片'] * 2),
+            # '城市风景', '城市泊油路', '迪拜旅游城市', '日本庭院', '铁轨铁路', '乌克兰城市建筑', '自然风景',
+
+            # 训练集9
+            'wuthering_wave', 'Z1500PX', '2000PXA', '2000PXB', '2000PXC', '2000PXE', '动漫图片',
+            'OST_dataset/animal', 'OST_dataset/building',
+            'OST_dataset/grass', 'OST_dataset/mountain',
+            'OST_dataset/plant', 'OST_dataset/sky', 'OST_dataset/water',
+
+            # 训练集10
+            # 'wuthering_wave', 'Z1500PX', '2000PXA', '2000PXB', '2000PXC', '2000PXE', '动漫图片',
+            # 'wed1', 'wed2', 'wed3', 'wed4',
+
+            # 训练集11
+            # 'wuthering_wave', 'Z1500PX', '2000PXA', '2000PXB', '2000PXC', '2000PXE', '动漫图片',
+            # 'REDS2K', 'blend', 'RealSR(V3)', 'DIV2K_train_HR', 'Flickr2K_HR', 'face',
         ],
         eval_data_folder='data/eval',
         # eval_data_name_list=['动漫验证集'],
