@@ -322,7 +322,7 @@ def hitsir_pro测试浅层特征提取3_gan_experiment(
             # 'wuthering_wave', *(['动漫图片'] * 2),
             # '城市风景', '城市泊油路', '迪拜旅游城市', '日本庭院', '铁轨铁路', '乌克兰城市建筑', '自然风景',
 
-            # 训练集9
+            # 训练集9(对动漫训练效果友好)
             'wuthering_wave', 'Z1500PX', '2000PXA', '2000PXB', '2000PXC', '2000PXE', '动漫图片',
             'OST_dataset/animal', 'OST_dataset/building',
             'OST_dataset/grass', 'OST_dataset/mountain',
