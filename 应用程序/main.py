@@ -3,7 +3,7 @@ import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from btn_click_fun import *
 
-window = ttk.Window(title='图像超分辨率', size=(1440, 1150), position=(200, 100), themename='yeti')
+window = ttk.Window(title='图像超分辨率', size=(1440, 1080), position=(200, 100), themename='yeti')
 # 禁止用户拉伸窗口
 window.resizable(False, False)
 # 设置窗口左上角图标
@@ -32,7 +32,7 @@ style.map('Custom.TRadiobutton', foreground=[('disabled', 'black')])
 
 # 设置主标题
 title = ttk.Label(window, text="图像超分辨率", font=("Arial Bold", 30))
-title.grid(row=0, column=0, columnspan='9', ipady=50)
+title.grid(row=0, column=0, columnspan='9', ipady=30)
 
 start_button = None
 source_image_label = None
