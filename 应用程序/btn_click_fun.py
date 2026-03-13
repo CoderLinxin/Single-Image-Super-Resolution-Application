@@ -181,7 +181,7 @@ def start_button_click_handle(
     lr_img = None
     with Image.open(select_image_text_var.get(), mode='r') as img_open:
         lr_img = img_open.convert('RGB')
-    lr_img = to_tensor_transform(lr_img).to(torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'))
+    lr_img = to_tensor_transform(lr_img)
 
     # 执行图像超分
     sr_img, block_count = image_block_handle(

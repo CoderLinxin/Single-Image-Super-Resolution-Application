@@ -32,7 +32,7 @@ def image_block_handle(
     w_idx_list = list(range(0, w - tile, stride)) + [w - tile]  # 宽度方向的切块索引
 
     # 创建用于存储结果的张量
-    E = torch.zeros((1, c, h * 4, w * 4)).to(img.device)  # 存储最终结果
+    E = torch.zeros((1, c, h * 4, w * 4))  # 存储最终结果
     W = torch.zeros_like(E)  # 存储权重
 
     # 需要处理的分块总数
@@ -47,7 +47,7 @@ def image_block_handle(
             # 提取当前切块
             in_patch = img[:, h_idx:h_idx + tile, w_idx:w_idx + tile]  # (c, tile, tile)
             # 对当前块进行超分
-            out_patch = inference_function(in_patch)  # (1, c, tile*4, tile*4)
+            out_patch = inference_function(in_patch).to(torch.device('cpu'))  # (1, c, tile*4, tile*4)
             # 生成与切块输出同形状的权重(以便后续对重叠区域的像素求平均)
             out_patch_mask = torch.ones_like(out_patch)
             # 累加结果到对应位置

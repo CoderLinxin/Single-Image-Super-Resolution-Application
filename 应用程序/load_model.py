@@ -37,5 +37,6 @@ def inference(lr_img: torch.Tensor):
     """
 
     with torch.no_grad():
-        sr: torch.Tensor = model(lr_img.unsqueeze(0)).clip(0, 1)
+        sr: torch.Tensor = model(lr_img.to(torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')).unsqueeze(0)).clip(0, 1)
         return sr
+

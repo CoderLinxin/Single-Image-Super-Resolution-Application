@@ -118,21 +118,21 @@ def get_bicubic_lr(hr_path: str):
 #     weight_path='weights/hitsir_pro_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/new_epoch_model.pth',
 #     img_path='data/test/RealSRSet+5images/0014.jpg'
 # )
-main(
-    model_type='hit_sir_pro',
-    weight_path='weights/hitsir_pro测试浅层特征提取3_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/new_epoch_model.pth',
-    img_path='data/test/RealSRSet+5images/0014.jpg'
-)
 # main(
 #     model_type='hit_sir_pro',
-#     weight_path='weights/hitsir_pro测试浅层特征提取3_gan_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/epoch=150(通用超分)/new_epoch_model.pth',
+#     weight_path='weights/hitsir_pro测试浅层特征提取3_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/new_epoch_model.pth',
 #     img_path='data/test/RealSRSet+5images/0014.jpg'
 # )
-# main(
-#     model_type='bsrgan',
-#     weight_path='weights/bsrgan/bsrgan.pth',
-#     img_path='data/test/RealSRSet+5images/0014.jpg'
-# )
+main(
+    model_type='hit_sir_pro',
+    weight_path='weights/hitsir_pro测试浅层特征提取3_gan_loss(l1)_mulsizeconvextract(True)_casa(True)_fusion_embed_dim(180)_len(depths)(6)_augment/new_epoch_model.pth',
+    img_path='data/test/RealSRSet+5images/0030.jpg'
+)
+main(
+    model_type='bsrgan',
+    weight_path='weights/bsrgan/bsrgan.pth',
+    img_path='data/test/RealSRSet+5images/0030.jpg'
+)
 # main(
 #     model_type='bsrgan',
 #     weight_path='weights/bsrgan/bsrnet.pth',
