@@ -247,6 +247,8 @@ def hitsir_pro测试浅层特征提取3_gan_experiment(
         hier_win_ratios,
         is_gradient_accurate=False,  # 是否开启梯度累加
         gradient_accurate_batch_size: int = 0,  # 开启梯度累加时需要达到的实际 batch_size 大小(需要是 batch_size 的整数倍)
+        is_use_only_gaussian_blur: bool = False,
+        is_use_only_gaussian_blur_prob: bool = 0.3,
 ):
     # 梯度累加
     if is_gradient_accurate:
@@ -263,7 +265,9 @@ def hitsir_pro测试浅层特征提取3_gan_experiment(
         lr_img_type='[0,1]',
         hr_img_type='[0,1]',
         is_lr_amplify=False,  # rcan 的输入为 lr 图像(不需要放大到与 hr 图像相同大小)
-        is_augment=is_augment
+        is_augment=is_augment,
+        is_use_only_gaussian_blur=is_use_only_gaussian_blur,
+        is_use_only_gaussian_blur_prob=is_use_only_gaussian_blur_prob
     )
     eval_data_config = copy.deepcopy(train_data_config)
     eval_data_config.split = 'eval|test'

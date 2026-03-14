@@ -8,7 +8,9 @@ class DatasetConfig:
             hr_img_type: str = '[0,1]',
             is_lr_amplify: bool = False,
             is_augment: bool = False,
-            is_bsrgan_degrade: bool = True
+            is_bsrgan_degrade: bool = True,
+            is_use_only_gaussian_blur: bool = False,  # 是否单独使用高斯模糊生成低分辨率图像(仅在 is_bsrgan_degrade 为 true 时有效)
+            is_use_only_gaussian_blur_prob: bool = 0.3,  # is_use_only_gaussian_blur 为 True 时,使用纯高斯模糊生成 lr 图像的概率
     ):
         """
         :param split: 'train' 或者 'eval|test'
@@ -27,6 +29,8 @@ class DatasetConfig:
         self.is_lr_amplify = is_lr_amplify
         self.is_augment = is_augment
         self.is_bsrgan_degrade = is_bsrgan_degrade
+        self.is_use_only_gaussian_blur = is_use_only_gaussian_blur
+        self.is_use_only_gaussian_blur_prob = is_use_only_gaussian_blur_prob
 
         # 高分辨率图像上截取的图像块大小
         self.image_size = self.crop_size * self.scaling_factor

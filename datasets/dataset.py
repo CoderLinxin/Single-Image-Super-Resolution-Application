@@ -1,12 +1,13 @@
 import glob
 import os
+import random
 
 import torch
 from torch.utils import data
 from configs.dataset_config import DatasetConfig
 from utils.utils import ImageTransforms, get_augment_param, augment
 from abc import ABCMeta
-from PIL import Image
+from PIL import Image, ImageFilter
 from 参考资料.KAIR_master.utils import utils_blindsr
 from torchvision import transforms
 import numpy as np
@@ -29,6 +30,8 @@ class Dataset(data.Dataset):
         self.config = config
         self.data_folder = data_folder
         self.images_path = glob.glob(data_folder + '/*')
+        self.to_pil_image_transform = transforms.ToPILImage()
+        self.to_tensor_transform = transforms.ToTensor()
 
         # 定义数据处理方式
         self.hr_transform = ImageTransforms(
@@ -81,12 +84,20 @@ class Dataset(data.Dataset):
 
         # bsrgan 退化模型(lr_imgs 需要重新获取),hr_imgs无变化
         if self.config.split == "train" and self.config.is_bsrgan_degrade:
-            # (c,h,w) -> (h,w,c)
-            hr_imgs = hr_imgs.permute(1, 2, 0)
-            hr_imgs = hr_imgs.numpy()
-            lr_imgs, hr_imgs = utils_blindsr.degradation_bsrgan(hr_imgs, self.config.scaling_factor, lq_patchsize=self.config.crop_size, isp_model=None)
-            lr_imgs = torch.from_numpy(lr_imgs).permute(2, 0, 1)
-            hr_imgs = torch.from_numpy(hr_imgs).permute(2, 0, 1)
+            # 单独使用纯高斯模糊来生成 lr 图像
+            if self.config.is_use_only_gaussian_blur and random.random() < self.config.is_use_only_gaussian_blur_prob:
+                # 对 lr 图像执行高斯模糊
+                blur_radius = random.randint(1, 5)
+                lr_imgs = self.to_pil_image_transform(lr_imgs)
+                lr_imgs = lr_imgs.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+                lr_imgs = self.to_tensor_transform(lr_imgs)
+            else:
+                # (c,h,w) -> (h,w,c)
+                hr_imgs = hr_imgs.permute(1, 2, 0)
+                hr_imgs = hr_imgs.numpy()
+                lr_imgs, hr_imgs = utils_blindsr.degradation_bsrgan(hr_imgs, self.config.scaling_factor, lq_patchsize=self.config.crop_size, isp_model=None)
+                lr_imgs = torch.from_numpy(lr_imgs).permute(2, 0, 1)
+                hr_imgs = torch.from_numpy(hr_imgs).permute(2, 0, 1)
 
         return lr_imgs, hr_imgs, (filename, suffix)
 
