@@ -89,7 +89,10 @@ class Dataset(data.Dataset):
                 # 对 lr 图像执行高斯模糊
                 blur_radius = random.randint(2, 7)
                 lr_imgs = self.to_pil_image_transform(lr_imgs)
-                lr_imgs = lr_imgs.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+                if random.random() < 0.7:
+                    lr_imgs = lr_imgs.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+                else:
+                    lr_imgs = lr_imgs.filter(ImageFilter.BoxBlur(radius=blur_radius))
                 lr_imgs = self.to_tensor_transform(lr_imgs)
             else:
                 # (c,h,w) -> (h,w,c)
