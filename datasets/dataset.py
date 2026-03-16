@@ -87,7 +87,7 @@ class Dataset(data.Dataset):
             # 单独使用纯高斯模糊来生成 lr 图像
             if self.config.is_use_only_gaussian_blur and random.random() < self.config.is_use_only_gaussian_blur_prob:
                 # 对 lr 图像执行高斯模糊
-                blur_radius = random.randint(2, 7)
+                blur_radius = random.randint(2, 8)
                 lr_imgs = self.to_pil_image_transform(lr_imgs)
                 if random.random() < 0.7:
                     lr_imgs = lr_imgs.filter(ImageFilter.GaussianBlur(radius=blur_radius))
