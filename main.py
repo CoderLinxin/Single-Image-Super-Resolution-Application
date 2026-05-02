@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
     # main('hitsir', is_test=False, is_augment=True)
 
-    main('hitsir_pro测试浅层特征提取3_测试经典超分', is_test=False, is_augment=True, is_bsrgan_degrade=False, loss='l1',
+    main('hitsir_pro测试浅层特征提取3_测试经典超分', is_test=True, is_augment=True, is_bsrgan_degrade=False, loss='l1',
          is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
          epochs=2000, batch_size=16, test_model_name='best_psnr_model.pth',
          # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
