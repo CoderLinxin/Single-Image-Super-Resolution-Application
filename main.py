@@ -76,13 +76,13 @@ if __name__ == '__main__':
 
     # main('hitsir', is_test=False, is_augment=True)
 
-    # main('hitsir_pro测试浅层特征提取3_测试经典超分', is_test=True, is_augment=True, is_bsrgan_degrade=False, loss='l1',
-    #      is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
-    #      epochs=2000, batch_size=16, test_model_name='best_psnr_model.pth',
-    #      # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
-    #      embed_dim=60, base_win_size=[8, 8], depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6],
-    #      mlp_ratio=2, upsampler='pixelshuffledirect', hier_win_ratios=[0.5, 1, 2, 4, 6, 8],
-    #      )
+    main('hitsir_pro测试浅层特征提取3_测试经典超分', is_test=False, is_augment=True, is_bsrgan_degrade=False, loss='l1',
+         is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
+         epochs=2000, batch_size=16, test_model_name='best_psnr_model.pth',
+         # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
+         embed_dim=60, base_win_size=[8, 8], depths=[6, 6, 6, 6], num_heads=[6, 6, 6, 6],
+         mlp_ratio=2, upsampler='pixelshuffledirect', hier_win_ratios=[0.5, 1, 2, 4, 6, 8],
+         )
 
     # main('rrdb', is_test=False, is_augment=True)
     # main('swinir', is_test=True, is_augment=True)
@@ -91,14 +91,14 @@ if __name__ == '__main__':
     # 114~: batch_size = 2
     # 272~300: 使用梯度累加
     # 340~: 使用其他数据集训练
-    # main('hitsir_pro测试浅层特征提取3', is_test=False, is_augment=True, loss='l1',
-    #      is_gradient_accurate=True, gradient_accurate_batch_size=8,
-    #      is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
-    #      epochs=400, batch_size=4, test_model_name='best_psnr_ssim_lpips_model.pth',
-    #      # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
-    #      embed_dim=180, base_win_size=[8, 8], depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
-    #      mlp_ratio=2, upsampler='nearest+conv', hier_win_ratios=[0.5, 1, 2, 4, 6, 8, 10, 12],
-    #      )
+    main('hitsir_pro测试浅层特征提取3', is_test=False, is_augment=True, loss='l1',
+         is_gradient_accurate=True, gradient_accurate_batch_size=8,
+         is_mult_size_conv_feat_extract=True, is_channel_spatial_attn=True, is_fusion=True,
+         epochs=357, batch_size=4, test_model_name='best_psnr_ssim_lpips_model.pth',
+         # 注意 embed_dim 必须是 num_heads[i] * 2 的整数倍
+         embed_dim=180, base_win_size=[8, 8], depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
+         mlp_ratio=2, upsampler='nearest+conv', hier_win_ratios=[0.5, 1, 2, 4, 6, 8, 10, 12],
+         )
 
     # 1~110: 动漫图像现实图像混杂训练
     # 111~150: 仅使用现实图像训练
